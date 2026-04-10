@@ -1,64 +1,48 @@
-# 🍃 Guia de Configuração: Spring Boot + VS Code (Interface Visual)
+# 🚀 Guia: Iniciando um Projeto Spring Boot no VS Code
 
-Este repositório contém um guia passo a passo para configurar um ambiente de desenvolvimento Java com Spring Boot, utilizando apenas a interface visual do Visual Studio Code.
+Este guia detalha o processo de configuração de um ambiente de desenvolvimento Back-end utilizando Java e Spring Boot.
 
----
+## 🛠️ 1. Preparação do Ambiente
+Antes de criar o projeto, certifique-se de que o seu **Visual Studio Code** possui as ferramentas necessárias:
+* [cite_start]**Java Extension Pack**: Instale para suporte completo à linguagem Java[cite: 11].
+* [cite_start]**Spring Boot Extension Pack**: Essencial para ferramentas de inicialização e execução do Spring[cite: 11].
 
-## 🛠️ 1. Pré-requisitos (O Kit de Sobrevivência)
+## 💻 2. Criando o Projeto (Passo a Passo)
+[cite_start]Siga estas etapas dentro do VS Code para gerar a estrutura base do projeto[cite: 10]:
 
-Antes de começar, você precisa instalar o motor do Java e as ferramentas de automação:
+1.  [cite_start]**Abrir o Initializr**: Pressione `Ctrl + Shift + P` e digite `Spring Initializr: Create a Maven Project`[cite: 12].
+2.  [cite_start]**Selecionar o Gerenciador**: Escolha **Maven Project** (recomendado para APIs)[cite: 10].
+3.  [cite_start]**Versão do Spring Boot**: Escolha a versão estável mais recente (evite as etiquetas `SNAPSHOT` ou `M4`)[cite: 10].
+4.  [cite_start]**Linguagem**: Selecione **Java**[cite: 10].
+5.  **Configurações de Identidade**:
+    * [cite_start]**Group ID**: Domínio da organização (ex: `com.projeto`)[cite: 12].
+    * [cite_start]**Artifact ID**: Nome do projeto (ex: `meu-app`)[cite: 12].
+6.  [cite_start]**Empacotamento**: Selecione **Jar**[cite: 12].
+7.  [cite_start]**Versão do Java**: Selecione a versão instalada (ex: **17** ou **21**)[cite: 12].
 
-1.  **JDK 17 ou 21:** * Recomendado: [Eclipse Temurin (Adoptium)](https://adoptium.net/). 
-    * *Nota:* Durante a instalação, marque a caixa **"Set JAVA_HOME"**.
-2.  **Visual Studio Code:** [Download aqui](https://code.visualstudio.com/).
-3.  **Extensões do VS Code (Ctrl+Shift+X):**
-    * `Extension Pack for Java` (Microsoft)
-    * `Spring Boot Extension Pack` (VMware)
-    * `Lombok Annotations Support` (Para evitar erros de Getter/Setter)
+## 📦 3. Dependências Iniciais
+[cite_start]Para um projeto pronto para desenvolvimento, adicione estas dependências na criação[cite: 12]:
+* **Spring Web**: Para criar endpoints REST e rodar o servidor Tomcat.
+* **Spring Boot DevTools**: Para reiniciar o servidor automaticamente.
+* **Spring Data JPA**: Para persistência em bancos de dados.
+* **MySQL Driver** ou **H2 Database**: Driver de conexão com o banco.
 
----
+## 📂 4. Estrutura do Projeto
+Após a geração, o projeto terá esta organização básica:
+* [cite_start]`src/main/java`: Onde fica o código-fonte e suas classes (como as `models`)[cite: 12].
+* `src/main/resources`: Onde fica o arquivo `application.properties` para configurações.
+* `pom.xml`: Arquivo do Maven que gerencia todas as bibliotecas.
 
-## 🏗️ 2. Criando o Projeto (Sem Digitar Comandos)
+## 🚀 5. Executando o Projeto
+1.  Abra a classe principal (ex: `DemoApplication.java`).
+2.  Clique no link **Run** acima do método `main`.
+3.  Verifique no console o log: `Tomcat started on port 8080`.
 
-1.  Abra o VS Code.
-2.  Pressione **`Ctrl + Shift + P`** para abrir a Paleta de Comandos.
-3.  Digite e selecione: **`Spring Initializr: Create a Maven Project`**.
-4.  **Siga o fluxo de configuração no topo da tela:**
+## 📤 6. Versionamento (Git)
+[cite_start]Utilize os comandos básicos no terminal para salvar seu progresso[cite: 17, 18]:
 
-| Configuração | O que selecionar/digitar |
-| :--- | :--- |
-| **Spring Boot Version** | Escolha a versão estável mais recente (ex: 3.x.x) |
-| **Language** | `Java` |
-| **Group Id** | `com.projeto` (seu identificador) |
-| **Artifact Id** | `meu-app` (nome do projeto) |
-| **Packaging** | `Jar` |
-| **Java Version** | `17` ou `21` |
-| **Dependencies** | Selecione: `Spring Web`, `Spring Boot DevTools`, `Lombok` |
-
-5. Escolha uma pasta no seu computador e clique em **Generate into this folder**.
-6. Quando aparecer o aviso no canto inferior, clique em **Open**.
-
----
-
-## ⚙️ 3. Configuração do Ambiente de Trabalho
-
-Assim que o projeto carregar, o VS Code baixará as dependências automaticamente.
-
-### Criando sua primeira API
-1. No menu lateral, navegue até: `src/main/java/com/projeto/meuapp/`.
-2. Clique com o **botão direito** na pasta e selecione **New Java Class**.
-3. Nomeie como `OlaController.java` e cole o código:
-
-```java
-package com.projeto.meuapp;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class OlaController {
-    @GetMapping("/")
-    public String home() {
-        return "Servidor Spring Boot rodando com sucesso! 🚀";
-    }
-}
+```bash
+git init            # Inicializa o repositório local
+git add .           # Prepara os arquivos para o commit
+git commit -m "msg" # Salva as alterações
+git push            # Envia para o repositório remoto
