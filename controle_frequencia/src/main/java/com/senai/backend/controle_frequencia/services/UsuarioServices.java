@@ -1,6 +1,7 @@
 //a pasta service é responsável por conter a lógica de negócio da aplicação
 // Ela interage com os repositórios para realizar operações de CRUD
 //comente todo o codigo e a logica de cada coisa
+//a pasta services chama a pasta repositories
 package com.senai.backend.controle_frequencia.services;
 
 import java.util.List;

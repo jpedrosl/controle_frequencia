@@ -1,0 +1,96 @@
+Objetivo
+
+Este documento explica, de forma prática e direta, a lógica do CRUD no backend do projeto e o papel de cada pasta/pacote. Sem exemplos de código: apenas responsabilidades, fluxo e recomendações para implementar recursos de forma consistente.
+
+Resumo rápido (fluxo)
+
+Cliente → Controller → Service → Repository → Banco de dados
+(Resposta: Banco → Repository → Service → Controller → Cliente)
+
+Checklist do que este documento cobre
+- O que cada pasta/pacote faz
+- Quem chama quem (fluxo de chamadas)
+- Onde ficam validação, transações e tratamento de erro
+- Ordem prática para criar um CRUD novo
+- Boas práticas e checklist final
+
+Pastas / pacotes e responsabilidades (prático)
+
+1) `model` ou `entity`
+- Propósito: armazenar a estrutura dos dados persistidos (forma dos registros/tabelas).
+- Responsabilidade: apenas representação de dados; não conter lógica de negócio.
+- Quem a usa: `repository` e `service`.
+
+2) `repository`
+- Propósito: abstrair o acesso ao banco de dados (operações CRUD e consultas específicas).
+- Responsabilidade: definir interfaces/contratos de persistência; não aplicar regras de negócio.
+- Quem chama: somente `service`.
+
+3) `service`
+- Propósito: concentrar regras de negócio, validações complexas, orquestração entre repositories e limites transacionais.
+- Responsabilidade: implementar a lógica do domínio (por exemplo, checar regras antes de salvar, combinar dados de vários repositórios, garantir integridade e iniciar transações).
+- Quem chama: `controller`; quem é chamado: `repository` (um service pode chamar vários repositories).
+
+4) `controller`
+- Propósito: camada de entrada HTTP (endereços/rotas da API).
+- Responsabilidade: receber requisições, validar entrada básica (via DTOs), chamar o service apropriado e retornar resposta HTTP com status correto.
+- Não deve conter: regras de negócio; apenas orquestração e tradução de protocolo (HTTP ↔ DTO).
+
+5) `dto` (opcional, recomendado)
+- Propósito: objetos de transferência usados na API (entrada/saída).
+- Responsabilidade: definir contrato público da API e validações de formato/obrigatoriedade.
+- Quem usa: `controller` e `service` para conversão entre DTOs e entidades.
+
+6) `exception`
+- Propósito: centralizar exceções customizadas e handlers que transformam exceções em respostas HTTP padronizadas.
+- Responsabilidade: mapear exceções do domínio e do banco para códigos HTTP e mensagens amigáveis.
+
+7) `config`
+- Propósito: configuração global (segurança, CORS, beans, propriedades específicas).
+- Responsabilidade: prover infraestrutura e políticas que afetam todas as camadas.
+
+Fluxo de chamadas (quem chama quem)
+- Controller chama → Service
+- Service chama → Repository (pode chamar vários)
+- Repository executa operações no banco
+- Exceções lançadas em Service/Repository são capturadas pelo handler em `exception` e traduzidas em respostas HTTP
+
+Onde colocar validação, autenticação e transações
+- Validação de formato e obrigatoriedade: em DTOs e validada no `controller` (entrada). Evite validações de negócio apenas no controller.
+- Regras de negócio e checagens de consistência: no `service` (único lugar para lógica do domínio).
+- Autenticação/autorização: via `config` (security filters/config) ou anotações aplicadas antes do controller.
+- Transações (commit/rollback): definidas em métodos do `service` (marcar transacionais; usar read-only para buscas quando aplicável).
+
+Tratamento de erros (prático)
+- Lançar exceções descritivas nas camadas internas (service/repository) sem formatar respostas HTTP.
+- Centralizar a tradução exceção → resposta HTTP em um handler (`exception`) que mapeia códigos (404, 400, 409, 500).
+- Padronizar o payload de erro para facilitar consumo por front-end.
+
+Ordem prática ao criar um novo recurso (ex.: um CRUD completo)
+1. Definir a estrutura dos dados (onde ficam os campos) em `model`.
+2. Criar a interface de persistência em `repository` (consultas necessárias).
+3. Definir DTOs públicos (entrada/saída) em `dto` com validações.
+4. Implementar `service` com regras, validações de negócio e transações; chamar repository.
+5. Implementar `controller` que recebe DTOs, chama o service e retorna respostas com status corretos.
+6. Atualizar `exception` com exceções/custom handlers se necessário.
+7. Documentar no `notes`/README o contrato do resource (endpoints, campos, status) e testar manualmente.
+
+Boas práticas rápidas
+- Separe responsabilidades: cada pacote tem uma função única e bem definida.
+- Não exponha entidades do `model` diretamente na API pública; use DTOs.
+- Mantenha serviços pequenos e testáveis; extraia lógica complexa para componentes auxiliares quando necessário.
+- Use mensagens de erro claras e padronizadas no handler.
+- Documente decisões arquiteturais no `notes` e no `README` para novos desenvolvedores.
+
+Checklist final para cada recurso antes de integrar
+- [ ] Estrutura de dados definida em `model`
+- [ ] Persistência implementada em `repository`
+- [ ] DTOs definidos e validados
+- [ ] Regras e transações implementadas em `service`
+- [ ] Endpoints expostos em `controller` com status corretos
+- [ ] Tratamento de erros centralizado em `exception`
+- [ ] Documentação mínima (notes/README) e testes manuais
+
+Resumo
+
+Coloque os dados em `model`, o acesso a dados em `repository`, as regras em `service` e a interface HTTP em `controller`. `dto`, `exception` e `config` são suportes que mantêm o backend limpo, testável e consistente. Mantendo essa separação você garante código mais fácil de entender, explicar e evoluir.

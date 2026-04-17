@@ -1,6 +1,6 @@
 //a pasta repository é responsável por gerenciar a persistência dos dados de usuários
 // Ela contém interfaces que estendem JpaRepository para fornecer operações CRUD
-
+//a pasta repositories chama a pasta models
 
 package com.senai.backend.controle_frequencia.repositories;
 
