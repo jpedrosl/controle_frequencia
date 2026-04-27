@@ -1,4 +1,4 @@
-```markdown
+
 # 🚀 Guia: Iniciando um Projeto Spring Boot no VS Code
 
 Este guia detalha o processo de configuração de um ambiente de desenvolvimento Back-end utilizando Java e Spring Boot no Visual Studio Code.
