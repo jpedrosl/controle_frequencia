@@ -1,4 +1,3 @@
-
 # 🚀 Guia: Iniciando um Projeto Spring Boot no VS Code
 
 Este guia detalha o processo de configuração de um ambiente de desenvolvimento Back-end utilizando Java e Spring Boot no Visual Studio Code.
@@ -35,17 +34,22 @@ Para um projeto pronto para desenvolvimento, adicione estas dependências na cri
 * **Spring Data JPA**: Para persistência em bancos de dados.
 * **MySQL Driver** ou **H2 Database**: Driver de conexão com o banco.
 
-## 📂 4. Estrutura do Projeto
+## 📂 4. Fluxo de Desenvolvimento (MVC)
 
-Após a geração, o projeto terá esta organização básica:
+Para manter o código organizado e funcional, seguimos uma ordem de criação das camadas do projeto:
 
-* `src/main/java`: Onde fica o código-fonte e suas classes (como as `models`).
-* `src/main/resources`: Onde fica o arquivo `application.properties` para configurações.
-* `pom.xml`: Arquivo do Maven que gerencia todas as bibliotecas.
+| Ordem | Camada | Função Principal | Depende de quem? |
+| :--- | :--- | :--- | :--- |
+| 1 | **Model** | Define as tabelas e a estrutura do banco. | Ninguém |
+| 2 | **Repository** | Interface que executa comandos SQL (CRUD). | **Model** |
+| 3 | **Service** | Camada de inteligência e regras de negócio. | **Repository** |
+| 4 | **Controller** | Gerencia as rotas HTTP e atende o usuário. | **Service** |
+
+---
 
 ## 🚀 5. Executando o Projeto
 
-1.  Abra a classe principal (ex: `DemoApplication.java`).
+1.  Abra a classe principal (ex: `MeuAppApplication.java`).
 2.  Clique no link **Run** acima do método `main`.
 3.  Verifique no console o log: `Tomcat started on port 8080`.
 
